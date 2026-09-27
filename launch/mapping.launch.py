@@ -20,6 +20,8 @@ def generate_launch_description():
     output_arg = DeclareLaunchArgument('output', default_value='/tmp/rsf_slam_map')
     rate_arg = DeclareLaunchArgument('rate', default_value='1.0')
     start_offset_arg = DeclareLaunchArgument('start_offset', default_value='0')
+    params_arg = DeclareLaunchArgument('params_file', default_value=config_file)
+    params_file = LaunchConfiguration('params_file')
     bag = LaunchConfiguration('bag')
     output = LaunchConfiguration('output')
     rate = LaunchConfiguration('rate')
@@ -29,7 +31,7 @@ def generate_launch_description():
         package='pointcloud_to_laserscan',
         executable='pointcloud_to_laserscan_node',
         name='pointcloud_to_laserscan',
-        parameters=[config_file],
+        parameters=[params_file],
         remappings=[('cloud_in', '/rsf/hokuyo_cloud2'), ('scan', '/scan')],
         output='screen',
     )
@@ -37,7 +39,7 @@ def generate_launch_description():
     slam = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(slam_launch),
         launch_arguments={
-            'slam_params_file': config_file,
+            'slam_params_file': params_file,
             'use_sim_time': 'true',
         }.items(),
     )
@@ -78,6 +80,7 @@ def generate_launch_description():
         output_arg,
         rate_arg,
         start_offset_arg,
+        params_arg,
         scan_node,
         slam,
         save_after_playback,

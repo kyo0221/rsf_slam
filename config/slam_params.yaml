@@ -13,27 +13,28 @@ slam_toolbox:
     transform_timeout: 0.2
     tf_buffer_duration: 600.0
     throttle_scans: 1
-    minimum_time_interval: 0.5
-    minimum_travel_distance: 0.5
-    minimum_travel_heading: 0.35
+    # Accumulate the sparse 36-ray scans more densely for continuous walls.
+    minimum_time_interval: 0.1
+    minimum_travel_distance: 0.15
+    minimum_travel_heading: 0.1
     scan_buffer_size: 10
     scan_buffer_maximum_scan_distance: 10.0
     min_laser_range: 0.1
     max_laser_range: 30.0
-    use_scan_matching: true
+    use_scan_matching: false
     use_scan_barycenter: true
-    do_loop_closing: true
-    loop_search_maximum_distance: 4.5
-    loop_match_minimum_chain_size: 20
-    loop_match_maximum_variance_coarse: 3.0
-    loop_match_minimum_response_coarse: 0.5
-    loop_match_minimum_response_fine: 0.6
+    do_loop_closing: false
+    loop_search_maximum_distance: 3.0
+    loop_match_minimum_chain_size: 25
+    loop_match_maximum_variance_coarse: 1.5
+    loop_match_minimum_response_coarse: 0.55
+    loop_match_minimum_response_fine: 0.65
     solver_plugin: solver_plugins::CeresSolver
     ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
     ceres_preconditioner: SCHUR_JACOBI
     ceres_trust_strategy: LEVENBERG_MARQUARDT
     ceres_dogleg_type: TRADITIONAL_DOGLEG
-    ceres_loss_function: None
+    ceres_loss_function: HuberLoss
 
 pointcloud_to_laserscan:
   ros__parameters:
@@ -42,7 +43,10 @@ pointcloud_to_laserscan:
     transform_tolerance: 0.1
     min_height: -0.3
     max_height: 0.3
-    angle_min: -1.8326
+    # The simulator has 36 horizontal rays at 0.10472 rad intervals.
+    # Keep rays just inside their bins: float32 XYZ roundoff otherwise moves
+    # points to the preceding bin (a 6-degree error). Preserve the 36-ray FOV.
+    angle_min: -1.832601
     angle_max: 1.84
     angle_increment: 0.10472
     scan_time: 0.05
