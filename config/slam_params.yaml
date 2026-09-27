@@ -1,0 +1,51 @@
+slam_toolbox:
+  ros__parameters:
+    use_sim_time: true
+    mode: mapping
+    map_frame: map
+    odom_frame: rsf_odom
+    base_frame: base_footprint
+    scan_topic: /scan
+    use_map_saver: true
+    resolution: 0.05
+    map_update_interval: 2.0
+    transform_publish_period: 0.02
+    transform_timeout: 0.2
+    tf_buffer_duration: 600.0
+    throttle_scans: 1
+    minimum_time_interval: 0.5
+    minimum_travel_distance: 0.5
+    minimum_travel_heading: 0.35
+    scan_buffer_size: 10
+    scan_buffer_maximum_scan_distance: 10.0
+    min_laser_range: 0.1
+    max_laser_range: 30.0
+    use_scan_matching: true
+    use_scan_barycenter: true
+    do_loop_closing: true
+    loop_search_maximum_distance: 4.5
+    loop_match_minimum_chain_size: 20
+    loop_match_maximum_variance_coarse: 3.0
+    loop_match_minimum_response_coarse: 0.5
+    loop_match_minimum_response_fine: 0.6
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    ceres_loss_function: None
+
+pointcloud_to_laserscan:
+  ros__parameters:
+    use_sim_time: true
+    target_frame: rsf_hokuyo3d
+    transform_tolerance: 0.1
+    min_height: -0.3
+    max_height: 0.3
+    angle_min: -1.8326
+    angle_max: 1.84
+    angle_increment: 0.10472
+    scan_time: 0.05
+    range_min: 0.3
+    range_max: 30.0
+    use_inf: true
